@@ -2,7 +2,38 @@
 #include<fstream>
 #include<random>
 #include<forward_list>
-#include"funcs.h"
+#include"AStar.h"
+
+DeliveryGenerator::DeliveryGenerator()
+{
+	setTransportSpeed();
+}
+
+Delivery* DeliveryGenerator::generateDelivery()
+{
+	Delivery* newDelivery = new Delivery;
+	Cargo* cargo = &newDelivery->cargo;
+	setCargoContent(newDelivery);
+	setCargoCost(cargo);
+	setCargoName(cargo);
+	setCargoReceiverSender(cargo);
+	setDepartureArrival(newDelivery);
+	setDepartureTime(newDelivery);
+	setDeliveryRoute(newDelivery);
+	return newDelivery;
+}
+
+void DeliveryGenerator::setTransportSpeed()
+{
+	/// <summary>
+	/// speed in km/h
+	/// </summary>
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::CAR, 80));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::TRAIN, 80));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::AIR, 700));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::SHIP, 35));
+
+}
 
 void DeliveryGenerator::setStations()
 {
@@ -81,39 +112,34 @@ void DeliveryGenerator::setCargoCost(Cargo* cargo)
 
 void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 {
-	int cur = deliv->departurePoint;
-	int moved_dist = 0;
-	int cur_move;
-	int evristic;
-	int x1, y1, x2, y2;
-	Station* st;
-	std::forward_list<std::pair<int ,int>> avail_towns; // for towns and their A* charecteristics
-	std::vector<int> is_blocked(stations.size(), 0); // 0 - not blocked, 1 - blocked
-	
-	is_blocked[cur] = 1;
+	AStar alg;
+	std::stack<int> path;
+	Delivery::TRANSPORT transport;
+	Delivery::Section section;
+	int distance;
+	int time = deliv->departureTime;
+	int depSt, destSt;
 
-	while (cur != deliv->destinationPoint)
+	path = alg.findPath(stations, deliv->departurePoint, deliv->destinationPoint); // setting shortest path using A*
+	depSt = path.top();
+	path.pop();
+	while (!path.empty())
 	{
-		st = &stations[cur];
-		//moved_dist = avai
-		for (auto i : st->adjacentStations)
-		{
-			if (!is_blocked[i]) // if this stations is not blocked
-			{
-				x1 = stations[i].coords.x;
-				y1 = stations[i].coords.y;
-				/*x2 = stations[deliv->destinationPoint].coords.x;
-				y2 = stations[deliv->destinationPoint].coords.y;
-				evristic = calculateTheDistance(x1, y1, x2, y2);*/
-				x2 = st->coords.x;
-				y2 = st->coords.y;
-				cur_move = moved_dist + calculateTheDistance(x1, y2, x2, y2);
-				if(avail_towns[])
-			}
-			
+		destSt = path.top();
+		path.pop();
 
-		}
+		section.departurePoint = &stations[depSt];
+		section.arrivalPoint = &stations[destSt];
+		section.departureTime = time;
 
+		distance = setSectionDistance(depSt, destSt);
+		transport = setSectionTransport(distance);
+		time += setSectionTime(distance, transport);
+
+		section.arrivalTime = time; 
+		section.transport = transport;
+
+		deliv->sections.push_back(section);
 	}
 }
 
@@ -124,8 +150,8 @@ void DeliveryGenerator::setDepartureTime(Delivery* deliv)
 
 void DeliveryGenerator::setDepartureArrival(Delivery* deliv)
 {
-	int destination;
-	int departure;
+	int destination = 0;
+	int departure = 0;
 	while (destination == departure) // sender can't be receiver
 	{
 		destination = rand() % stations.size();
@@ -133,4 +159,31 @@ void DeliveryGenerator::setDepartureArrival(Delivery* deliv)
 	}
 	deliv->departurePoint = departure;
 	deliv->destinationPoint = destination;
+}
+
+int DeliveryGenerator::setSectionDistance(int dep, int dest)
+{
+	int x1, x2, y1, y2;
+	x1 = stations[dep].coords.x;
+	y1 = stations[dep].coords.y;
+	x2 = stations[dest].coords.x;
+	y2 = stations[dest].coords.y;
+
+	return calculateTheDistance(x1, y1, x2, y2);
+}
+
+Delivery::TRANSPORT DeliveryGenerator::setSectionTransport(int distance)
+{
+	if (distance < 300)
+		return Delivery::TRANSPORT::CAR;
+	else if (distance < 700)
+		return Delivery::TRANSPORT::TRAIN;
+	else if (distance < 2000)
+		return Delivery::TRANSPORT::AIR;
+	else return Delivery::TRANSPORT::SHIP;
+}
+
+int DeliveryGenerator::setSectionTime(int distance, Delivery::TRANSPORT trans)
+{
+	return distance / transportSpeed.at(trans);
 }

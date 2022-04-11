@@ -2,7 +2,8 @@
 #include <forward_list>
 #include"funcs.h"
 
-std::vector<int> AStar::findPath(std::vector<Station>& stations, int dep, int dest)
+
+std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int dest)
 {
 	int cur = dep;
 	int moved_dist = 0;
@@ -53,7 +54,13 @@ std::vector<int> AStar::findPath(std::vector<Station>& stations, int dep, int de
 
 		}
 	}
-    return std::vector<int>();
+	std::stack<int> final_path;
+	while (cur != dep)
+	{
+		final_path.push(cur);
+		cur = ceils[cur].comeFrom;
+	}
+	return final_path; // without first station
 }
 
 int AStar::getMin()

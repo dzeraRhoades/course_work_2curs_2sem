@@ -2,12 +2,15 @@
 #include"Delivery.h"
 #include<vector>
 #include "json.hpp"
+#include"funcs.h"
 
 class DeliveryGenerator
 {
 public:
+	DeliveryGenerator();
 	Delivery* generateDelivery();
 private:
+	void setTransportSpeed();
 	void setStations();
 	void setCargoContent(Delivery* deliv);
 	void setCargoName(Cargo* cargo);
@@ -16,7 +19,12 @@ private:
 	void setDeliveryRoute(Delivery* deliv);
 	void setDepartureTime(Delivery* deliv);
 	void setDepartureArrival(Delivery* deliv);
+	int setSectionDistance(int dep, int dest);
+	Delivery::TRANSPORT setSectionTransport(int distance);
+	int setSectionTime(int distance, Delivery::TRANSPORT trans);
 private: 
+	std::map<Delivery::TRANSPORT, int> transportSpeed;
+
 	/// <summary>
 	/// information about all stations
 	/// </summary>

@@ -1,6 +1,7 @@
 #pragma once
 #include<vector>
 #include<list>
+#include<stack>
 #include"Station.h"
 
 class AStar
@@ -20,7 +21,7 @@ class AStar
 		int station;
 	};
 public:
-	std::vector<int> findPath(std::vector<Station>& stations, int dep, int dest);
+	std::stack<int> findPath(std::vector<Station>& stations, int dep, int dest);
 private:
 	std::list<int> availCeils;
 	std::vector<Ceil> ceils;

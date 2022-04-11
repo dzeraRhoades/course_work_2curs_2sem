@@ -15,7 +15,7 @@
 class Delivery
 {
 	friend class DeliveryGenerator;
-	enum class SECTION_TYPE
+	enum class TRANSPORT
 	{
 		SHIP,
 		TRAIN,
@@ -26,7 +26,7 @@ class Delivery
 	{
 		int departureTime;
 		int arrivalTime;
-		SECTION_TYPE type;
+		TRANSPORT transport;
 		const Station* departurePoint;
 		const Station* arrivalPoint;
 	};
