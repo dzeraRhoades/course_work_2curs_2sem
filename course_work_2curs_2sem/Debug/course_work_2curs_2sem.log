@@ -1,0 +1,11 @@
+﻿  AStar.cpp
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(17,20): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(30,28): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(31,28): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(32,31): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(33,31): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(34,46): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(35,20): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(36,20): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\Влад\source\repos\course_work_2curs_2sem\course_work_2curs_2sem\AStar.cpp(37,27): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  course_work_2curs_2sem.vcxproj -> C:\Users\Влад\source\repos\course_work_2curs_2sem\Debug\course_work_2curs_2sem.exe

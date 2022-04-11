@@ -43,15 +43,15 @@ std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int des
 						availCeils.push_back(i);
 				}
 			}
-			try
-			{
-				cur = getMin();
-			}
-			catch (const std::exception&) // if the list is empty
-			{
-				throw(std::exception()); // no way to set Route
-			}
 
+		}
+		try
+		{
+			cur = getMin();
+		}
+		catch (const std::exception&) // if the list is empty
+		{
+			throw(std::exception()); // no way to set Route
 		}
 	}
 	std::stack<int> final_path;
@@ -60,6 +60,7 @@ std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int des
 		final_path.push(cur);
 		cur = ceils[cur].comeFrom;
 	}
+	final_path.push(dep);
 	return final_path; // without first station
 }
 

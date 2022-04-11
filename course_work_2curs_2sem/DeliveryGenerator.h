@@ -12,8 +12,9 @@ public:
 private:
 	void setTransportSpeed();
 	void setStations();
-	void setCargoContent(Delivery* deliv);
+	void setCargoContent(Cargo* cargo);
 	void setCargoName(Cargo* cargo);
+	void setCargoWieght(Cargo* cargo);
 	void setCargoReceiverSender(Cargo* cargo);
 	void setCargoCost(Cargo* cargo);
 	void setDeliveryRoute(Delivery* deliv);

@@ -13,9 +13,11 @@ Delivery* DeliveryGenerator::generateDelivery()
 {
 	Delivery* newDelivery = new Delivery;
 	Cargo* cargo = &newDelivery->cargo;
-	setCargoContent(newDelivery);
+	setStations();
+	setCargoContent(cargo);
 	setCargoCost(cargo);
 	setCargoName(cargo);
+	setCargoWieght(cargo);
 	setCargoReceiverSender(cargo);
 	setDepartureArrival(newDelivery);
 	setDepartureTime(newDelivery);
@@ -66,7 +68,7 @@ void DeliveryGenerator::setStations()
 	f.close();
 }
 
-void DeliveryGenerator::setCargoContent(Delivery* deliv)
+void DeliveryGenerator::setCargoContent(Cargo* cargo)
 {
 	std::ifstream f("content.json", std::ifstream::binary);
 	if (!f.is_open())
@@ -74,7 +76,7 @@ void DeliveryGenerator::setCargoContent(Delivery* deliv)
 
 	nlohmann::json js;
 	f >> js;
-	deliv->cargo.content = js.at("content")[rand() % js.at("content").size()];
+	cargo->content = js.at("content")[rand() % js.at("content").size()];
 	f.close();
 }
 
@@ -85,6 +87,13 @@ void DeliveryGenerator::setCargoName(Cargo* cargo)
 	{
 		cargo->name.push_back('a' + (rand() % 26));
 	}
+}
+
+void DeliveryGenerator::setCargoWieght(Cargo* cargo)
+{
+	int weight;
+	weight = (rand() % 980) + 20;
+	cargo->weight = weight;
 }
 
 void DeliveryGenerator::setCargoReceiverSender(Cargo* cargo)

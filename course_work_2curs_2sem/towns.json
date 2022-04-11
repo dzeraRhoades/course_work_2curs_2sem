@@ -6,91 +6,91 @@
       "x": 55.7578,
       "y": 37.6176,
       "index": 0,
-      "neighbours" :  []
+      "neighbours" :  [1, 2, 3, 4, 6, 9, 12]
     },
     {
       "name": "Tver",
       "x": 56.8596,
       "y": 35.9118,
       "index": 1,
-      "neighbours": []
+      "neighbours": [0, 5]
     },
     {
       "name": "St. Petersburg",
       "x": 59.9390,
       "y": 30.3158,
       "index": 2,
-      "neighbours": []
+      "neighbours": [0, 5]
     },
     {
       "name": "Tula",
       "x": 54.1931,
       "y": 37.6173,
       "index": 3,
-      "neighbours": []
+      "neighbours": [0, 10]
     },
     {
       "name": "Smolensk",
       "x": 54.7826,
       "y": 32.0452,
       "index": 4,
-      "neighbours": []
+      "neighbours": [0]
     },
     {
       "name": "Veliky Novgorod",
       "x": 58.5228,
       "y": 31.2698,
       "index": 5,
-      "neighbours": []
+      "neighbours": [2, 3]
     },
     {
       "name": "Nizhny Novgorod",
       "x": 56.3267,
       "y": 44.0065,
       "index": 6,
-      "neighbours": []
+      "neighbours": [0, 11]
     },
     {
       "name": "Vologda",
       "x": 59.2205,
       "y": 39.8915,
       "index": 7,
-      "neighbours": []
+      "neighbours": [0, 8]
     },
     {
       "name": "Arhangelsk",
       "x": 64.5399,
       "y": 40.5157,
       "index": 8,
-      "neighbours": []
+      "neighbours": [7, 12]
     },
     {
       "name": "Vladikavkaz",
       "x": 43.0246,
       "y": 44.6817,
       "index": 9,
-      "neighbours": []
+      "neighbours": [0, 10]
     },
     {
       "name": "Rostov",
       "x": 47.2220,
       "y": 39.7203,
       "index": 10,
-      "neighbours": []
+      "neighbours": [9, 3]
     },
     {
       "name": "Ekaterinburg",
       "x": 56.8380,
       "y": 60.5974,
       "index": 11,
-      "neighbours": []
+      "neighbours": [12, 6]
     },
     {
       "name": "Vorkuta",
       "x": 67.4935,
       "y": 64.0501,
       "index": 12,
-      "neighbours": []
+      "neighbours": [0, 8, 11]
     }
   ] 
 }
