@@ -7,11 +7,10 @@
 class DeliveryGenerator
 {
 public:
-	DeliveryGenerator();
+	DeliveryGenerator(std::vector<Station>* stations);
 	Delivery* generateDelivery();
 private:
 	void setTransportSpeed();
-	void setStations();
 	void setCargoContent(Cargo* cargo);
 	void setCargoName(Cargo* cargo);
 	void setCargoWieght(Cargo* cargo);
@@ -29,11 +28,11 @@ private:
 	/// <summary>
 	/// information about all stations
 	/// </summary>
-	std::vector<Station> stations;
+	std::vector<Station>* stations;
 	/// <summary>
 	/// files for data
 	/// </summary>
-	std::string townsFile = "towns.json";
+	//std::string townsFile = "towns.json";
 	std::string namesFile = "names.json";
 	std::string cargoNames = "cargos.json";
 };

@@ -9,7 +9,7 @@ std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int des
 	int moved_dist = 0;
 	int cur_move;
 	//int evristic;
-	int x1, y1, x2, y2;
+	double x1, y1, x2, y2;
 	Station* st;
 	//Ceil ceil;
 
@@ -19,6 +19,7 @@ std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int des
 
 	while (cur != dest)
 	{
+		ceils[cur].status = Status::BLOCKED;
 		st = &stations[cur];
 		moved_dist = ceils[cur].passedWay;
 		//moved_dist = avai
@@ -34,7 +35,7 @@ std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int des
 				ceils[i].everistic = calculateTheDistance(x1, y1, x2, y2);
 				x2 = st->coords.x;
 				y2 = st->coords.y;
-				cur_move = moved_dist + calculateTheDistance(x1, y2, x2, y2);
+				cur_move = moved_dist + calculateTheDistance(x1, y1, x2, y2);
 				if (!(ceils[i].status == Status::VISITED && cur_move < ceils[i].passedWay))
 				{
 					ceils[i].comeFrom = cur;
@@ -71,14 +72,19 @@ int AStar::getMin()
 	int min_ind = availCeils.front();
 	int min_val = ceils[min_ind].everistic + ceils[min_ind].passedWay;
 	int cur_val;
-	for (auto i : availCeils)
+	auto i = availCeils.begin();
+	auto minIterator = availCeils.begin();
+	for (; i != availCeils.end(); i++)
 	{
-		cur_val = ceils[i].everistic + ceils[i].passedWay;
+		
+		cur_val = ceils[*i].everistic + ceils[*i].passedWay;
 		if (cur_val < min_val)
 		{
 			min_val = cur_val;
-			min_ind = i;
+			min_ind = *i;
+			minIterator = i;
 		}
 	}
+	availCeils.erase(minIterator);
 	return min_ind;
 }

@@ -4,16 +4,17 @@
 #include<forward_list>
 #include"AStar.h"
 
-DeliveryGenerator::DeliveryGenerator()
+DeliveryGenerator::DeliveryGenerator(std::vector<Station>* stations)
 {
+	this->stations = stations;
 	setTransportSpeed();
 }
+
 
 Delivery* DeliveryGenerator::generateDelivery()
 {
 	Delivery* newDelivery = new Delivery;
 	Cargo* cargo = &newDelivery->cargo;
-	setStations();
 	setCargoContent(cargo);
 	setCargoCost(cargo);
 	setCargoName(cargo);
@@ -37,36 +38,36 @@ void DeliveryGenerator::setTransportSpeed()
 
 }
 
-void DeliveryGenerator::setStations()
-{
-	std::ifstream f("towns.json", std::ifstream::binary);
-	if (!f.is_open())
-		throw std::exception("towns file can't be opened");
-
-	nlohmann::json js;
-	nlohmann::json town;
-	f >> js;
-
-	int towns_num = js.at("towns").size();
-	Station st;
-
-	for (int i = 0; i < towns_num; i++)
-	{
-		town = js.at("towns")[i];
-		for (int j = 0; j < town.at("neighbours").size(); j++) // adding neighbours
-		{
-			st.adjacentStations.push_back(town.at("neighbours")[j]);
-		}
-		st.index = i;
-		st.coords.x = town.at("x");
-		st.coords.y = town.at("y");
-		st.name = town.at("name");
-		stations.push_back(st);
-		st.adjacentStations.clear();
-	}
-
-	f.close();
-}
+//void DeliveryGenerator::setStations()
+//{
+//	std::ifstream f("towns.json", std::ifstream::binary);
+//	if (!f.is_open())
+//		throw std::exception("towns file can't be opened");
+//
+//	nlohmann::json js;
+//	nlohmann::json town;
+//	f >> js;
+//
+//	int towns_num = js.at("towns").size();
+//	Station st;
+//
+//	for (int i = 0; i < towns_num; i++)
+//	{
+//		town = js.at("towns")[i];
+//		for (int j = 0; j < town.at("neighbours").size(); j++) // adding neighbours
+//		{
+//			st.adjacentStations.push_back(town.at("neighbours")[j]);
+//		}
+//		st.index = i;
+//		st.coords.x = town.at("x");
+//		st.coords.y = town.at("y");
+//		st.name = town.at("name");
+//		stations.push_back(st);
+//		st.adjacentStations.clear();
+//	}
+//
+//	f.close();
+//}
 
 void DeliveryGenerator::setCargoContent(Cargo* cargo)
 {
@@ -129,7 +130,7 @@ void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 	int time = deliv->departureTime;
 	int depSt, destSt;
 
-	path = alg.findPath(stations, deliv->departurePoint, deliv->destinationPoint); // setting shortest path using A*
+	path = alg.findPath(*stations, deliv->departurePoint, deliv->destinationPoint); // setting shortest path using A*
 	depSt = path.top();
 	path.pop();
 	while (!path.empty())
@@ -137,8 +138,8 @@ void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 		destSt = path.top();
 		path.pop();
 
-		section.departurePoint = &stations[depSt];
-		section.arrivalPoint = &stations[destSt];
+		section.departurePoint = &stations->at(depSt);
+		section.arrivalPoint = &stations->at(destSt);
 		section.departureTime = time;
 
 		distance = setSectionDistance(depSt, destSt);
@@ -149,6 +150,7 @@ void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 		section.transport = transport;
 
 		deliv->sections.push_back(section);
+		depSt = destSt;
 	}
 }
 
@@ -163,8 +165,8 @@ void DeliveryGenerator::setDepartureArrival(Delivery* deliv)
 	int departure = 0;
 	while (destination == departure) // sender can't be receiver
 	{
-		destination = rand() % stations.size();
-		departure = rand() % stations.size();
+		destination = rand() % stations->size();
+		departure = rand() % stations->size();
 	}
 	deliv->departurePoint = departure;
 	deliv->destinationPoint = destination;
@@ -173,10 +175,10 @@ void DeliveryGenerator::setDepartureArrival(Delivery* deliv)
 int DeliveryGenerator::setSectionDistance(int dep, int dest)
 {
 	int x1, x2, y1, y2;
-	x1 = stations[dep].coords.x;
-	y1 = stations[dep].coords.y;
-	x2 = stations[dest].coords.x;
-	y2 = stations[dest].coords.y;
+	x1 = stations->at(dep).coords.x;
+	y1 = stations->at(dep).coords.y;
+	x2 = stations->at(dest).coords.x;
+	y2 = stations->at(dest).coords.y;
 
 	return calculateTheDistance(x1, y1, x2, y2);
 }

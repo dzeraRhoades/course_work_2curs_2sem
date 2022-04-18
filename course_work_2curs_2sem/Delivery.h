@@ -14,7 +14,7 @@
 
 class Delivery
 {
-	friend class DeliveryGenerator;
+public:
 	enum class TRANSPORT
 	{
 		SHIP,
@@ -22,20 +22,27 @@ class Delivery
 		CAR,
 		AIR
 	};
+	Delivery();
+	int getId() const;
+	void getInfo();
+private:
+	static int nextId;
+	friend class DeliveryGenerator;
+	friend class Logistic;
+	
 	struct Section // sections between stations
 	{
 		int departureTime;
 		int arrivalTime;
 		TRANSPORT transport;
-		const Station* departurePoint;
-		const Station* arrivalPoint;
+		Station* departurePoint;
+		Station* arrivalPoint;
 	};
 	Cargo cargo;
 	std::list<Section> sections;
 	int cost;
 	int departurePoint;
 	int destinationPoint;
-	int departureTime; // TODO: better use some of chrono classes or we
-						//can use it as the move from cur time
+	int departureTime; // TODO: better use some of chrono classes or we can use it as the move from cur time
+	int id;					
 };
-
