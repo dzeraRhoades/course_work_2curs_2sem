@@ -23,12 +23,14 @@ void Delivery::getInfo()
 		{TRANSPORT::CAR, "CAR"},
 		{TRANSPORT::SHIP, "SHIP"},
 		{TRANSPORT::TRAIN, "TRAIN"} };
-	std::cout << "Path: " << sections.front().departurePoint->name << "("<< trans.at(sections.front().transport)
-		<< " " << departureTime << ")->";
-	for (auto i : sections)
+	std::cout << "Path: " << sections.front().departurePoint->name << "(" << departureTime << ")->";
+	for (auto i = sections.cbegin(); i != sections.cend(); ++i)
 	{
-		std::cout << i.arrivalPoint->name <<
-			"(" << trans.at(i.transport)<< " " << i.arrivalTime << ")->";
+		std::cout << i->arrivalPoint->name <<
+			"(" << trans.at(i->transport)<< " " << i->arrivalTime << ")";
+		std::advance(i, 1);
+		if (i-- != sections.cend())
+			std::cout << "->";
 	}
 	std::cout << std::endl;
 	std::cout << "Delivery cost: " << cost << std::endl;

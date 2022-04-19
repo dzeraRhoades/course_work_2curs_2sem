@@ -13,8 +13,8 @@ public:
 	};
 	Logistic(CONTAINER_TYPE type, std::vector<Station>* stations);
 	~Logistic();
-	void insertDelivery(Delivery* delivery); // throws exception if delivery with this id already excist
-	void erraseDelivery(int id); // throws exception if id doesn't excist
+	int insertDelivery(Delivery* delivery); // throws exception if delivery with this id already excist
+	void eraseDelivery(int id); // throws exception if id doesn't excist
 	int findDelivery(int id); // doesn't return delivery, but write information about it
 	std::vector<int> findDeliveriesFrom(const std::string& town); // returns indexes of all deliveries from given town
 	std::vector<int> findDeliveriesTo(const std::string& town); // shows all deliveries sent to given town

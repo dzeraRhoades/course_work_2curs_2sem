@@ -16,11 +16,25 @@ int main()
 void test()
 {
 	std::vector<Station> stations;
+	std::vector<int> foundDelivs;
 	setStations(stations);
 	Logistic logCompany(Logistic::CONTAINER_TYPE::TREE, &stations);
+	std::list<int> delivIds;
 	DeliveryGenerator gen(&stations);
 	for(int i = 0; i < 10; i++)
-		logCompany.insertDelivery(gen.generateDelivery());
+		delivIds.push_back(logCompany.insertDelivery(gen.generateDelivery()));
+	for (int i = 0; i < 10; i++)
+		logCompany.findDelivery(i);
+	foundDelivs = logCompany.findDeliveriesFrom("Rostov");
+	for (auto i : foundDelivs)
+		std::cout << i << " ";
+	std::cout << std::endl;
+	foundDelivs = logCompany.findDeliveriesTo("St. Petersburg");
+	for (auto i : foundDelivs)
+		std::cout << i << " ";
+	logCompany.eraseDelivery(5);
+	logCompany.eraseDelivery(3);
+	logCompany.eraseDelivery(8);
 }
 
 void setStations(std::vector<Station>& stations)

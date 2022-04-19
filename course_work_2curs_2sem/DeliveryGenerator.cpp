@@ -13,6 +13,7 @@ DeliveryGenerator::DeliveryGenerator(std::vector<Station>* stations)
 
 Delivery* DeliveryGenerator::generateDelivery()
 {
+	//srand(time(NULL));
 	Delivery* newDelivery = new Delivery;
 	Cargo* cargo = &newDelivery->cargo;
 	setCargoContent(cargo);
@@ -20,6 +21,7 @@ Delivery* DeliveryGenerator::generateDelivery()
 	setCargoName(cargo);
 	setCargoWieght(cargo);
 	setCargoReceiverSender(cargo);
+	setdeliveryCost(newDelivery);
 	setDepartureArrival(newDelivery);
 	setDepartureTime(newDelivery);
 	setDeliveryRoute(newDelivery);
@@ -120,6 +122,11 @@ void DeliveryGenerator::setCargoCost(Cargo* cargo)
 	cargo->cost = (rand() % (max_cost - min_cost)) + min_cost;
 }
 
+void DeliveryGenerator::setdeliveryCost(Delivery* deliv)
+{
+	deliv->cost = (rand() % 5000) + 200;
+}
+
 void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 {
 	AStar alg;
@@ -196,5 +203,5 @@ Delivery::TRANSPORT DeliveryGenerator::setSectionTransport(int distance)
 
 int DeliveryGenerator::setSectionTime(int distance, Delivery::TRANSPORT trans)
 {
-	return distance / transportSpeed.at(trans);
+	return (double(distance / transportSpeed.at(trans)))*60; // devide distance by speed and mult on 60 to get minutes
 }

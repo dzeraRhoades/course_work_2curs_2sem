@@ -16,6 +16,7 @@ private:
 	void setCargoWieght(Cargo* cargo);
 	void setCargoReceiverSender(Cargo* cargo);
 	void setCargoCost(Cargo* cargo);
+	void setdeliveryCost(Delivery* deliv);
 	void setDeliveryRoute(Delivery* deliv);
 	void setDepartureTime(Delivery* deliv);
 	void setDepartureArrival(Delivery* deliv);

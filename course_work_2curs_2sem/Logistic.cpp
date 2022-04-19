@@ -52,7 +52,7 @@ Logistic::~Logistic()
 	}
 }
 
-void Logistic::insertDelivery(Delivery* delivery)
+int Logistic::insertDelivery(Delivery* delivery)
 {
 	if (containerType == CONTAINER_TYPE::TREE)
 	{
@@ -63,7 +63,7 @@ void Logistic::insertDelivery(Delivery* delivery)
 		catch (const std::exception& ex)
 		{
 			std::cerr << ex.what() << std::endl;
-			return;
+			return -1;
 		}
 		size++;
 	}
@@ -76,13 +76,14 @@ void Logistic::insertDelivery(Delivery* delivery)
 		catch (const std::exception& ex)
 		{
 			std::cerr << ex.what() << std::endl;
-			return;
+			return -1;
 		}
 		size++;
 	}
+	return delivery->id;
 }
 
-void Logistic::erraseDelivery(int id)
+void Logistic::eraseDelivery(int id)
 {
 	if(containerType == CONTAINER_TYPE::TREE)
 	{
@@ -202,7 +203,7 @@ std::vector<int> Logistic::findDeliveriesTo(const std::string& town)
 			std::vector<Delivery*> vec = deliveriesTree->getVector();
 			for (auto i : vec)
 			{
-				if (i->sections.back().departurePoint->name == town)
+				if (i->sections.back().arrivalPoint->name == town)
 					indexVec.push_back(i->id);
 			}
 		}
