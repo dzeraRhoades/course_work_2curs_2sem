@@ -129,7 +129,7 @@ int Logistic::findDelivery(int id)
 		try
 		{
 			d = deliveriesTree->find(id);
-			d->getInfo();
+			//d->getInfo();
 
 		}
 		catch (const std::exception& ex)
@@ -142,8 +142,14 @@ int Logistic::findDelivery(int id)
 	{
 		try
 		{
-			d = deliveriesVector->at(id);
-			d->getInfo();
+			for (auto i : *deliveriesVector)
+			{
+				if (i->id == id)
+				{
+					//d->getInfo();
+					return id;
+				}
+			}
 		}
 		catch (const std::exception& ex)
 		{
@@ -220,6 +226,45 @@ std::vector<int> Logistic::findDeliveriesTo(const std::string& town)
 			for (auto i : *deliveriesVector)
 			{
 				if (i->sections.back().departurePoint->name == town)
+					indexVec.push_back(i->id);
+			}
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << ex.what() << std::endl;
+			return std::vector<int>();
+		}
+	}
+	return indexVec;
+}
+
+std::vector<int> Logistic::findDeliveriesWithHigherPrice(int price)
+{
+	std::vector<int> indexVec;
+	if (containerType == CONTAINER_TYPE::TREE)
+	{
+		try
+		{
+			std::vector<Delivery*> vec = deliveriesTree->getVector();
+			for (auto i : vec)
+			{
+				if (i->cost > price)
+					indexVec.push_back(i->id);
+			}
+		}
+		catch (const std::exception& ex)
+		{
+			std::cerr << ex.what() << std::endl;
+			return std::vector<int>();
+		}
+	}
+	else
+	{
+		try
+		{
+			for (auto i : *deliveriesVector)
+			{
+				if (i->cost > price)
 					indexVec.push_back(i->id);
 			}
 		}

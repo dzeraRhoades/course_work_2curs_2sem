@@ -1,12 +1,12 @@
 #include "Delivery.h"
 #include<map>
 
-int Delivery::nextId = 0;
+//int Delivery::nextId = 0;
 
 Delivery::Delivery()
 {
-	id = nextId;
-	nextId++;
+	//id = nextId;
+	//nextId++;
 }
 
 int Delivery::getId() const

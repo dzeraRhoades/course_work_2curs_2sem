@@ -26,7 +26,7 @@ public:
 	int getId() const;
 	void getInfo();
 private:
-	static int nextId;
+	//static int nextId;
 	friend class DeliveryGenerator;
 	friend class Logistic;
 	

@@ -11,21 +11,24 @@ DeliveryGenerator::DeliveryGenerator(std::vector<Station>* stations)
 }
 
 
-Delivery* DeliveryGenerator::generateDelivery()
+void DeliveryGenerator::generateDelivery()
 {
+	///it should not only generate delivery, but put it into file
 	//srand(time(NULL));
-	Delivery* newDelivery = new Delivery;
-	Cargo* cargo = &newDelivery->cargo;
+	Delivery newDelivery;
+	Cargo* cargo = &newDelivery.cargo;
 	setCargoContent(cargo);
 	setCargoCost(cargo);
 	setCargoName(cargo);
 	setCargoWieght(cargo);
 	setCargoReceiverSender(cargo);
-	setdeliveryCost(newDelivery);
-	setDepartureArrival(newDelivery);
-	setDepartureTime(newDelivery);
-	setDeliveryRoute(newDelivery);
-	return newDelivery;
+	setDeliveryId(&newDelivery);
+	setDeliveryCost(&newDelivery);
+	setDepartureArrival(&newDelivery);
+	setDepartureTime(&newDelivery);
+	setDeliveryRoute(&newDelivery);
+	writeInFile(&newDelivery);
+
 }
 
 void DeliveryGenerator::setTransportSpeed()
@@ -122,9 +125,31 @@ void DeliveryGenerator::setCargoCost(Cargo* cargo)
 	cargo->cost = (rand() % (max_cost - min_cost)) + min_cost;
 }
 
-void DeliveryGenerator::setdeliveryCost(Delivery* deliv)
+void DeliveryGenerator::setDeliveryCost(Delivery* deliv)
 {
 	deliv->cost = (rand() % 5000) + 200;
+}
+
+void DeliveryGenerator::setDeliveryId(Delivery* deliv)
+{
+	int id;
+	std::string strId;
+	std::ifstream f(availId);
+	if (!f.is_open())
+		throw std::exception("avail_id file can't be opened");
+	f >> strId;
+	f.close();
+	
+	id = atoi(strId.c_str());
+	deliv->id = id;
+	id++;
+	strId = std::to_string(id);
+
+	std::ofstream fout(availId);
+	if (!fout.is_open())
+		throw std::exception("avail_id file can't be opened");
+	fout << strId;
+	fout.close();
 }
 
 void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
@@ -205,3 +230,81 @@ int DeliveryGenerator::setSectionTime(int distance, Delivery::TRANSPORT trans)
 {
 	return (double(distance / transportSpeed.at(trans)))*60; // devide distance by speed and mult on 60 to get minutes
 }
+
+void DeliveryGenerator::writeInFile(Delivery* deliv)
+{
+	/// возможные ситуации: файлов вообще нет, тогда мы должны добавить нашу заявку в файл data0.json
+	/// добавление элемента в уже существующий файл
+	/// текущий файл полностью заполнен (1000 записей), нужно создать новый файл.
+	/// Решение: в каждом файле храним два поля: количество записей в нём и массив с записями
+	/// После того как мы добавили элемент в nlohman::json нам нужно переписать файл, для этого откроем его на чтение (прежние записи удалятся)
+	/// и закинем туда содержимое файла
+	std::ifstream f;
+	nlohmann::json js;
+	int file_count = 0;
+	int size = 0;
+	std::string filename;
+	filename = DATAFILE + std::to_string(file_count) + ".json";
+	f.open(filename, std::ifstream::binary);
+	while (f.is_open())
+	{
+		f >> js;
+		f.close();
+		if (js.at("size") < 1000)
+		{
+			size = js["size"];
+			break;
+		}
+		file_count++;
+		filename = DATAFILE + std::to_string(file_count) + ".json";
+		f.open(filename, std::ifstream::binary);
+	}
+	js["size"] = size;
+	js["size"] = js["size"] + 1;
+	writeJsonInFile(js, filename, deliv);
+}
+
+void DeliveryGenerator::writeJsonInFile(nlohmann::json& js, const std::string& filename, const Delivery* deliv)
+{
+	std::ofstream fout(filename, std::ofstream::binary);
+	if (!fout.is_open())
+		throw std::exception("can't open file for writing!");
+
+	addDelivToJson(js, deliv);
+	fout << js;
+
+	fout.close();
+}
+
+void DeliveryGenerator::addDelivToJson(nlohmann::json& js, const Delivery* deliv)
+{
+	nlohmann::json cargoJs;
+	nlohmann::json delivJs;
+	nlohmann::json sectionsJs;
+
+	cargoJs["name"] = deliv->cargo.name;
+	cargoJs["content"] = deliv->cargo.content;
+	cargoJs["cost"] = deliv->cargo.cost;
+	cargoJs["receiver"] = deliv->cargo.receiver;
+	cargoJs["sender"] = deliv->cargo.sender;
+	cargoJs["weight"] = deliv->cargo.weight;
+
+	delivJs["cargo"] = cargoJs;
+	delivJs["cost"] = deliv->cost;
+	delivJs["departurePoint"] = deliv->departurePoint;
+	delivJs["departureTime"] = deliv->departureTime;
+	delivJs["destinationPoint"] = deliv->destinationPoint;
+	delivJs["id"] = deliv->id;
+
+	for (auto i : deliv->sections)
+	{
+		sectionsJs["arrivalPoint"] = i.arrivalPoint->index;
+		sectionsJs["departurePoint"] = i.departurePoint->index;
+		sectionsJs["arrivalTime"] = i.arrivalTime;
+		sectionsJs["departureTime"] = i.departureTime;
+		sectionsJs["transport"] = (int)i.transport;
+		delivJs["sections"].push_back(sectionsJs);
+	}
+	js["deliveries"].push_back(delivJs);
+}
+
