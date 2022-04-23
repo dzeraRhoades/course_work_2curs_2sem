@@ -144,6 +144,7 @@
     <ClCompile Include="Delivery.cpp" />
     <ClCompile Include="DeliveryGenerator.cpp" />
     <ClCompile Include="funcs.cpp" />
+    <ClCompile Include="Json.cpp" />
     <ClCompile Include="Logistic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Station.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Delivery.h" />
     <ClInclude Include="DeliveryGenerator.h" />
     <ClInclude Include="funcs.h" />
+    <ClInclude Include="Json.h" />
     <ClInclude Include="Logistic.h" />
     <ClInclude Include="Station.h" />
     <ClInclude Include="trees\AVL.h" />

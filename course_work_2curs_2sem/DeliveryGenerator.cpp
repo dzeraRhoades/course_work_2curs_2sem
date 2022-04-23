@@ -11,7 +11,7 @@ DeliveryGenerator::DeliveryGenerator(std::vector<Station>* stations)
 }
 
 
-void DeliveryGenerator::generateDelivery()
+Delivery DeliveryGenerator::generateDelivery()
 {
 	///it should not only generate delivery, but put it into file
 	//srand(time(NULL));
@@ -27,19 +27,20 @@ void DeliveryGenerator::generateDelivery()
 	setDepartureArrival(&newDelivery);
 	setDepartureTime(&newDelivery);
 	setDeliveryRoute(&newDelivery);
-	writeInFile(&newDelivery);
+	return newDelivery;
+	//writeInFile(&newDelivery);
 
 }
 
 void DeliveryGenerator::setTransportSpeed()
 {
 	/// <summary>
-	/// speed in km/h
+	/// speed in m/s
 	/// </summary>
-	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::CAR, 80));
-	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::TRAIN, 80));
-	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::AIR, 700));
-	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::SHIP, 35));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::CAR, 22.2));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::TRAIN, 22.2));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::AIR, 194.4));
+	transportSpeed.insert(std::make_pair(Delivery::TRANSPORT::SHIP, 9.7));
 
 }
 
@@ -158,7 +159,7 @@ void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 	std::stack<int> path;
 	Delivery::TRANSPORT transport;
 	Delivery::Section section;
-	int distance;
+	double distance;
 	int time = deliv->departureTime;
 	int depSt, destSt;
 
@@ -188,7 +189,7 @@ void DeliveryGenerator::setDeliveryRoute(Delivery* deliv)
 
 void DeliveryGenerator::setDepartureTime(Delivery* deliv)
 {
-	deliv->departureTime = rand() % 525600; // minutes in year
+	deliv->departureTime = rand() % 31536000; // seconds in year
 }
 
 void DeliveryGenerator::setDepartureArrival(Delivery* deliv)
@@ -204,7 +205,7 @@ void DeliveryGenerator::setDepartureArrival(Delivery* deliv)
 	deliv->destinationPoint = destination;
 }
 
-int DeliveryGenerator::setSectionDistance(int dep, int dest)
+double DeliveryGenerator::setSectionDistance(int dep, int dest)
 {
 	int x1, x2, y1, y2;
 	x1 = stations->at(dep).coords.x;
@@ -215,96 +216,99 @@ int DeliveryGenerator::setSectionDistance(int dep, int dest)
 	return calculateTheDistance(x1, y1, x2, y2);
 }
 
-Delivery::TRANSPORT DeliveryGenerator::setSectionTransport(int distance)
+Delivery::TRANSPORT DeliveryGenerator::setSectionTransport(double distance)
 {
-	if (distance < 300)
+	if (distance < 300000)
 		return Delivery::TRANSPORT::CAR;
-	else if (distance < 700)
+	else if (distance < 700000)
 		return Delivery::TRANSPORT::TRAIN;
-	else if (distance < 2000)
+	else if (distance < 2000000)
 		return Delivery::TRANSPORT::AIR;
 	else return Delivery::TRANSPORT::SHIP;
 }
 
-int DeliveryGenerator::setSectionTime(int distance, Delivery::TRANSPORT trans)
+int DeliveryGenerator::setSectionTime(double distance, Delivery::TRANSPORT trans)
 {
-	return (double(distance / transportSpeed.at(trans)))*60; // devide distance by speed and mult on 60 to get minutes
+	return (double(distance / transportSpeed.at(trans))); // 
 }
 
-void DeliveryGenerator::writeInFile(Delivery* deliv)
-{
-	/// возможные ситуации: файлов вообще нет, тогда мы должны добавить нашу заявку в файл data0.json
-	/// добавление элемента в уже существующий файл
-	/// текущий файл полностью заполнен (1000 записей), нужно создать новый файл.
-	/// Решение: в каждом файле храним два поля: количество записей в нём и массив с записями
-	/// После того как мы добавили элемент в nlohman::json нам нужно переписать файл, для этого откроем его на чтение (прежние записи удалятся)
-	/// и закинем туда содержимое файла
-	std::ifstream f;
-	nlohmann::json js;
-	int file_count = 0;
-	int size = 0;
-	std::string filename;
-	filename = DATAFILE + std::to_string(file_count) + ".json";
-	f.open(filename, std::ifstream::binary);
-	while (f.is_open())
-	{
-		f >> js;
-		f.close();
-		if (js.at("size") < 1000)
-		{
-			size = js["size"];
-			break;
-		}
-		file_count++;
-		filename = DATAFILE + std::to_string(file_count) + ".json";
-		f.open(filename, std::ifstream::binary);
-	}
-	js["size"] = size;
-	js["size"] = js["size"] + 1;
-	writeJsonInFile(js, filename, deliv);
-}
+//void DeliveryGenerator::writeInFile(Delivery* deliv)
+//{
+//	/// возможные ситуации: файлов вообще нет, тогда мы должны добавить нашу заявку в файл data0.json
+//	/// добавление элемента в уже существующий файл
+//	/// текущий файл полностью заполнен (1000 записей), нужно создать новый файл.
+//	/// Решение: в каждом файле храним два поля: количество записей в нём и массив с записями
+//	/// После того как мы добавили элемент в nlohman::json нам нужно переписать файл, для этого откроем его на чтение (прежние записи удалятся)
+//	/// и закинем туда содержимое файла
+//	std::ifstream f;
+//	nlohmann::json js;
+//	int file_count = 0;
+//	int size = 0;
+//	std::string filename;
+//	filename = DATAFILE + std::to_string(file_count) + ".json";
+//	f.open(filename, std::ifstream::binary);
+//	while (f.is_open())
+//	{
+//		f >> js;
+//		f.close();
+//		if (js.at("size") < 1000)
+//		{
+//			size = js["size"];
+//			break;
+//		}
+//		file_count++;
+//		filename = DATAFILE + std::to_string(file_count) + ".json";
+//		f.open(filename, std::ifstream::binary);
+//	}
+//	js["size"] = size;
+//	js["size"] = js["size"] + 1;
+//	writeJsonInFile(js, filename, deliv);
+//}
 
-void DeliveryGenerator::writeJsonInFile(nlohmann::json& js, const std::string& filename, const Delivery* deliv)
-{
-	std::ofstream fout(filename, std::ofstream::binary);
-	if (!fout.is_open())
-		throw std::exception("can't open file for writing!");
+//void DeliveryGenerator::writeJsonInFile(nlohmann::json& js, const std::string& filename, Delivery* deliv)
+//{
+//	std::ofstream fout(filename, std::ofstream::binary);
+//	if (!fout.is_open())
+//		throw std::exception("can't open file for writing!");
+//	JsonDelivery jd;
+//	nlohmann::json delJs;
+//
+//	jd.toJson(std::make_pair(deliv, stations), delJs);
+//	js.push_back(delJs);
+//	fout << js;
+//
+//	fout.close();
+//}
 
-	addDelivToJson(js, deliv);
-	fout << js;
-
-	fout.close();
-}
-
-void DeliveryGenerator::addDelivToJson(nlohmann::json& js, const Delivery* deliv)
-{
-	nlohmann::json cargoJs;
-	nlohmann::json delivJs;
-	nlohmann::json sectionsJs;
-
-	cargoJs["name"] = deliv->cargo.name;
-	cargoJs["content"] = deliv->cargo.content;
-	cargoJs["cost"] = deliv->cargo.cost;
-	cargoJs["receiver"] = deliv->cargo.receiver;
-	cargoJs["sender"] = deliv->cargo.sender;
-	cargoJs["weight"] = deliv->cargo.weight;
-
-	delivJs["cargo"] = cargoJs;
-	delivJs["cost"] = deliv->cost;
-	delivJs["departurePoint"] = deliv->departurePoint;
-	delivJs["departureTime"] = deliv->departureTime;
-	delivJs["destinationPoint"] = deliv->destinationPoint;
-	delivJs["id"] = deliv->id;
-
-	for (auto i : deliv->sections)
-	{
-		sectionsJs["arrivalPoint"] = i.arrivalPoint->index;
-		sectionsJs["departurePoint"] = i.departurePoint->index;
-		sectionsJs["arrivalTime"] = i.arrivalTime;
-		sectionsJs["departureTime"] = i.departureTime;
-		sectionsJs["transport"] = (int)i.transport;
-		delivJs["sections"].push_back(sectionsJs);
-	}
-	js["deliveries"].push_back(delivJs);
-}
+//void DeliveryGenerator::addDelivToJson(nlohmann::json& js, const Delivery* deliv)
+//{
+//	nlohmann::json cargoJs;
+//	nlohmann::json delivJs;
+//	nlohmann::json sectionsJs;
+//
+//	cargoJs["name"] = deliv->cargo.name;
+//	cargoJs["content"] = deliv->cargo.content;
+//	cargoJs["cost"] = deliv->cargo.cost;
+//	cargoJs["receiver"] = deliv->cargo.receiver;
+//	cargoJs["sender"] = deliv->cargo.sender;
+//	cargoJs["weight"] = deliv->cargo.weight;
+//
+//	delivJs["cargo"] = cargoJs;
+//	delivJs["cost"] = deliv->cost;
+//	delivJs["departurePoint"] = deliv->departurePoint;
+//	delivJs["departureTime"] = deliv->departureTime;
+//	delivJs["destinationPoint"] = deliv->destinationPoint;
+//	delivJs["id"] = deliv->id;
+//
+//	for (auto i : deliv->sections)
+//	{
+//		sectionsJs["arrivalPoint"] = i.arrivalPoint->index;
+//		sectionsJs["departurePoint"] = i.departurePoint->index;
+//		sectionsJs["arrivalTime"] = i.arrivalTime;
+//		sectionsJs["departureTime"] = i.departureTime;
+//		sectionsJs["transport"] = (int)i.transport;
+//		delivJs["sections"].push_back(sectionsJs);
+//	}
+//	js["deliveries"].push_back(delivJs);
+//}
 

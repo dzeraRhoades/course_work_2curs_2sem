@@ -28,5 +28,26 @@ double calculateTheDistance(double phA, double lA, double phB, double lB) {
 	double ad = atan2(y, x);
 	double dist = ad * EARTH_RADIUS;
 
-	return dist / 1000; // in km
+	return dist; // in m
 }
+
+std::string getTime(time_t _time)
+{
+	char s[40];
+	struct tm* u;
+	std::string f;
+	time_t timer = time(NULL);
+	timer += _time;
+	u = localtime(&timer);
+
+	memset(s, 0, 40);
+	strftime(s, 40, "%d.%m.%Y %H:%M:%S, %A", u);
+	f = s;
+	return f.substr(0, f.find(','));
+}
+
+//time_t tm = time(NULL);
+//tm += _time;
+//std::string f;
+//f = asctime(gmtime(&tm));
+//return f;

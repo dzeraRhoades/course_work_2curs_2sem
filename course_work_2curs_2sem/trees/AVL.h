@@ -342,6 +342,7 @@ private:
             this->Link(-a, P) = S;
             if (P->BF == a)
             {
+                P->BF = 0;
                 S->BF = -a;
                 R->BF = 0;
             }
@@ -352,6 +353,7 @@ private:
             }
             else if (P->BF == -a)
             {
+                P->BF = 0;
                 S->BF = 0;
                 R->BF = a;
             }

@@ -176,6 +176,12 @@ public:
     {
         return (*find_obj)(key);
     }
+    void clear()
+    {
+        if (top != nullptr)
+            clean(top);
+        top = nullptr;
+    }
     
 protected:
     SearchBinaryTree(){}

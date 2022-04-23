@@ -6,7 +6,7 @@ class Cargo
 	friend class DeliveryGenerator;
 public:
 	void getInfo();
-private:
+
 	std::string name;
 	std::string sender;
 	std::string receiver;

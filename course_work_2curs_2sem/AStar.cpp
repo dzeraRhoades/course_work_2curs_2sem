@@ -3,14 +3,14 @@
 #include"funcs.h"
 
 
-std::stack<int> AStar::findPath(std::vector<Station>& stations, int dep, int dest)
+std::stack<int> AStar::findPath(const std::vector<Station>& stations, int dep, int dest)
 {
 	int cur = dep;
 	int moved_dist = 0;
 	int cur_move;
 	//int evristic;
 	double x1, y1, x2, y2;
-	Station* st;
+	const Station* st;
 	//Ceil ceil;
 
 	ceils.resize(stations.size());

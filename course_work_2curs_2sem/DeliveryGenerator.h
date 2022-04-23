@@ -1,16 +1,16 @@
 #pragma once
 #include"Delivery.h"
 #include<vector>
-#include "json.hpp"
+#include "Json.h"
 #include"funcs.h"
 
-constexpr auto DATAFILE = "data";
+constexpr auto DATAFILE = "data/data";
 
 class DeliveryGenerator
 {
 public:
 	DeliveryGenerator(std::vector<Station>* stations);
-	void generateDelivery();
+	Delivery generateDelivery();
 private:
 	void setTransportSpeed();
 	void setCargoContent(Cargo* cargo);
@@ -23,19 +23,19 @@ private:
 	void setDeliveryRoute(Delivery* deliv);
 	void setDepartureTime(Delivery* deliv);
 	void setDepartureArrival(Delivery* deliv);
-	int setSectionDistance(int dep, int dest);
-	Delivery::TRANSPORT setSectionTransport(int distance);
-	int setSectionTime(int distance, Delivery::TRANSPORT trans);
-	void writeInFile(Delivery* deliv);
-	void writeJsonInFile(nlohmann::json& js, const std::string& filename, const Delivery* deliv);
-	void addDelivToJson(nlohmann::json& js, const Delivery* deliv);
+	double setSectionDistance(int dep, int dest);
+	Delivery::TRANSPORT setSectionTransport(double distance);
+	int setSectionTime(double distance, Delivery::TRANSPORT trans);
+	//void writeInFile(Delivery* deliv);
+	//void writeJsonInFile(nlohmann::json& js, const std::string& filename, Delivery* deliv);
+	//void addDelivToJson(nlohmann::json& js, const Delivery* deliv);
 private: 
-	std::map<Delivery::TRANSPORT, int> transportSpeed;
+	std::map<Delivery::TRANSPORT, double> transportSpeed;
 
 	/// <summary>
 	/// information about all stations
 	/// </summary>
-	std::vector<Station>* stations;
+	const std::vector<Station>* stations;
 	/// <summary>
 	/// files for data
 	/// </summary>

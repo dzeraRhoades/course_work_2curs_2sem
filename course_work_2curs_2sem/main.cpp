@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 #include"DeliveryGenerator.h"
 #include"trees/AVL.h"
@@ -21,17 +22,25 @@ void test()
 	std::vector<Station> stations;
 	std::vector<int> foundDelivs;
 	setStations(stations);
-	Logistic logCompany(Logistic::CONTAINER_TYPE::TREE, &stations);
+	Logistic logCompany(Logistic::CONTAINER_TYPE::VECTOR, &stations);
 	std::list<int> delivIds;
 	DeliveryGenerator gen(&stations);
-	for (int i = 0; i < 10000; i++)
+	Delivery del;
+	for (int i = 0; i < 150; i++)
 	{
-		if (i % 100 == 0) // 100 deliveries per 20 seconds
+		if (i % 50 == 0) // 100 deliveries per 20 seconds
 			std::cout << std::endl;
-		gen.generateDelivery();
+		del = gen.generateDelivery();
+		logCompany.insert(&del);
 	}
-	for (int i = 0; i < 1000000; i++)
-		logCompany.findDelivery(rand()%10000);
+	logCompany.find(230);
+	logCompany.find(250);
+	logCompany.find(220);
+	logCompany.find(241);
+	for (int i = 200; i < 250; i++)
+	{
+		logCompany.erase(i);
+	}
 
 
 	/*foundDelivs = logCompany.findDeliveriesFrom("Rostov");
