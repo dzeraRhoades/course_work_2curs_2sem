@@ -139,8 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="AStar.cpp" />
+    <ClCompile Include="AvlContainer.cpp" />
     <ClCompile Include="Cargo.cpp" />
+    <ClCompile Include="Container.cpp" />
     <ClCompile Include="Delivery.cpp" />
     <ClCompile Include="DeliveryGenerator.cpp" />
     <ClCompile Include="funcs.cpp" />
@@ -154,10 +157,14 @@
     <ClCompile Include="trees\SearchBinaryTree.cpp" />
     <ClCompile Include="trees\Tree.cpp" />
     <ClCompile Include="trees\tree_exception.cpp" />
+    <ClCompile Include="VectorContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="App.h" />
     <ClInclude Include="AStar.h" />
+    <ClInclude Include="AvlContainer.h" />
     <ClInclude Include="Cargo.h" />
+    <ClInclude Include="Container.h" />
     <ClInclude Include="Delivery.h" />
     <ClInclude Include="DeliveryGenerator.h" />
     <ClInclude Include="funcs.h" />
@@ -170,6 +177,7 @@
     <ClInclude Include="trees\SearchBinaryTree.h" />
     <ClInclude Include="trees\Tree.h" />
     <ClInclude Include="trees\tree_exception.h" />
+    <ClInclude Include="VectorContainer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="content.json" />

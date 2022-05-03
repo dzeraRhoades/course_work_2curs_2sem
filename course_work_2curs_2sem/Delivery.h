@@ -24,7 +24,7 @@ public:
 	};
 	Delivery();
 	int getId() const;
-	void getInfo();
+	void getInfo() const;
 
 	//static int nextId;
 	friend class DeliveryGenerator;

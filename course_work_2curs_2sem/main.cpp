@@ -3,7 +3,7 @@
 #include"DeliveryGenerator.h"
 #include"trees/AVL.h"
 #include<fstream>
-#include"Logistic.h"
+#include"App.h"
 
 
 void test();
@@ -19,28 +19,33 @@ int main()
 
 void test()
 {
-	std::vector<Station> stations;
-	std::vector<int> foundDelivs;
-	setStations(stations);
-	Logistic logCompany(Logistic::CONTAINER_TYPE::VECTOR, &stations);
-	std::list<int> delivIds;
-	DeliveryGenerator gen(&stations);
-	Delivery del;
-	for (int i = 0; i < 150; i++)
-	{
-		if (i % 50 == 0) // 100 deliveries per 20 seconds
-			std::cout << std::endl;
-		del = gen.generateDelivery();
-		logCompany.insert(&del);
-	}
-	logCompany.find(230);
-	logCompany.find(250);
-	logCompany.find(220);
-	logCompany.find(241);
-	for (int i = 200; i < 250; i++)
-	{
-		logCompany.erase(i);
-	}
+	App app;
+	app.startApplication();
+
+
+
+	//std::vector<Station> stations;
+	//std::vector<int> foundDelivs;
+	//setStations(stations);
+	//Logistic logCompany(Logistic::CONTAINER_TYPE::VECTOR, &stations);
+	//std::list<int> delivIds;
+	//DeliveryGenerator gen(&stations);
+	//Delivery del;
+	//for (int i = 0; i < 150; i++)
+	//{
+	//	if (i % 50 == 0) // 100 deliveries per 20 seconds
+	//		std::cout << std::endl;
+	//	del = gen.generateDelivery();
+	//	logCompany.insert(&del);
+	//}
+	//logCompany.find(230);
+	//logCompany.find(250);
+	//logCompany.find(220);
+	//logCompany.find(241);
+	//for (int i = 200; i < 250; i++)
+	//{
+	//	logCompany.erase(i);
+	//}
 
 
 	/*foundDelivs = logCompany.findDeliveriesFrom("Rostov");

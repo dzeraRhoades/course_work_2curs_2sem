@@ -1,8 +1,8 @@
 #include "Cargo.h"
 
-void Cargo::getInfo()
+void Cargo::getInfo() const 
 {
-	std::cout << "Cargo name: " << name << ", sender: " << sender << ", receiver: " << receiver
-		 << std::endl << "cost: " << cost << ", weight: " << weight << ", content: "
+	std::cout << "Имя доставки: " << name << ", отправитель: " << sender << ", получатель: " << receiver
+		 << std::endl << "стоимость: " << cost << ", вес: " << weight << ", содержимое: "
 		<< content << std::endl;
 }

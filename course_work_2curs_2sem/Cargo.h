@@ -5,7 +5,7 @@ class Cargo
 {
 	friend class DeliveryGenerator;
 public:
-	void getInfo();
+	void getInfo() const;
 
 	std::string name;
 	std::string sender;
