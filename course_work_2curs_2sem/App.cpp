@@ -29,7 +29,7 @@ void App::createDeliveries()
 	Delivery del;
 	for (int i = 0; i < 10000; i++)
 	{
-		if (i % 1000 == 0)
+		if (i % 10000 == 0)
 			std::cout << std::endl;
 		del = gen->generateDelivery();
 		try
@@ -171,7 +171,7 @@ void App::menu()
 			std::cout << "¬ведите город:\n>>";
 			std::cin.ignore();
 			std::getline(std::cin, buf);
-			logCompany->findDeliveriesFrom(buf);
+			logCompany->findDeliveries(Logistic::SEARCH_TYPE::FROM, &buf);
 			menuTab = MENU::CHOOSE_OPERATION;
 			system("pause");
 			break;
@@ -180,7 +180,7 @@ void App::menu()
 			std::cout << "¬ведите город:\n>>";
 			std::cin.ignore();
 			std::getline(std::cin, buf);
-			logCompany->findDeliveriesTo(buf);
+			logCompany->findDeliveries(Logistic::SEARCH_TYPE::TO, &buf);
 			menuTab = MENU::CHOOSE_OPERATION;
 			system("pause");
 			break;
@@ -192,7 +192,8 @@ void App::menu()
 				std::cin >> buf;
 				if (atoi(buf.c_str()) != 0 || (buf.size() == 1 && buf[0] == '0'))
 				{
-					logCompany->findDeliveriesWithHigherPrice(atoi(buf.c_str()));
+					int cost = atoi(buf.c_str());
+					logCompany->findDeliveries(Logistic::SEARCH_TYPE::COST, &cost);
 					break;
 				}
 			}

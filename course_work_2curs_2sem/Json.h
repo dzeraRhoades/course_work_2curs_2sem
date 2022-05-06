@@ -9,7 +9,7 @@ class JsonConverter
 public:
 	virtual ~JsonConverter(){}
 	virtual void toJson(const T& source, nlohmann::json& dest) = 0;
-	virtual void fromJson(const T& dest, nlohmann::json& source) = 0;
+	virtual void fromJson(T& dest, nlohmann::json& source) = 0;
 private:
 
 };
@@ -50,27 +50,26 @@ public:
 		}
 		dest = delivJs;
 	}
-	void fromJson(const Delivery& dest, nlohmann::json& source) override
+	void fromJson(Delivery& dest, nlohmann::json& source) override
 	{
 		nlohmann::json cargoJs;
 		nlohmann::json sectionsJs;
 		Delivery::Section section;
-		auto destDeliv = dest;
 		auto stations = Stations::Instance()->getStations();
 
 		cargoJs = source["cargo"];
-		destDeliv.cargo.name = cargoJs["name"];
-		destDeliv.cargo.content = cargoJs["content"];
-		destDeliv.cargo.cost = cargoJs["cost"];
-		destDeliv.cargo.receiver = cargoJs["receiver"];
-		destDeliv.cargo.sender = cargoJs["sender"];
-		destDeliv.cargo.weight = cargoJs["weight"];
+		dest.cargo.name = cargoJs["name"];
+		dest.cargo.content = cargoJs["content"];
+		dest.cargo.cost = cargoJs["cost"];
+		dest.cargo.receiver = cargoJs["receiver"];
+		dest.cargo.sender = cargoJs["sender"];
+		dest.cargo.weight = cargoJs["weight"];
 
-		destDeliv.cost = source["cost"];
-		destDeliv.departurePoint = source["departurePoint"];
-		destDeliv.departureTime = source["departureTime"];
-		destDeliv.destinationPoint = source["destinationPoint"];
-		destDeliv.id = source["id"];
+		dest.cost = source["cost"];
+		dest.departurePoint = source["departurePoint"];
+		dest.departureTime = source["departureTime"];
+		dest.destinationPoint = source["destinationPoint"];
+		dest.id = source["id"];
 
 		sectionsJs = source["sections"];
 		for (auto i : sectionsJs)
@@ -80,7 +79,7 @@ public:
 			section.arrivalTime = i["arrivalTime"];
 			section.departureTime = i["departureTime"];
 			section.transport = (Delivery::TRANSPORT)i["transport"];
-			destDeliv.sections.push_back(section);
+			dest.sections.push_back(section);
 		}
 	}
 };

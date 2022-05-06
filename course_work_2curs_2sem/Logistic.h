@@ -8,20 +8,22 @@
 class Logistic
 {
 public:
-	/*enum class CONTAINER_TYPE
+	enum class SEARCH_TYPE
 	{
-		TREE,
-		VECTOR
-	};*/
+		FROM,
+		TO,
+		COST
+	};
 	Logistic(Container* container/*, std::vector<Station>* stations*/);
 	~Logistic();
 	int insert(Delivery* deliv);
 	int erase(int id);
 	int find(int id);
 	int getSize();
-	void findDeliveriesFrom(const std::string& town); // returns indexes of all deliveries from given town
-	void findDeliveriesTo(const std::string& town); // shows all deliveries sent to given town
-	void findDeliveriesWithHigherPrice(int price);
+	//void findDeliveriesFrom(const std::string& town); // returns indexes of all deliveries from given town
+	//void findDeliveriesTo(const std::string& town); // shows all deliveries sent to given town
+	//void findDeliveriesWithHigherPrice(int price);
+	void findDeliveries(SEARCH_TYPE searchType, void* arg);
 	//void fromJson(Delivery& dest, nlohmann::json& source);
 	//void getDeliveryInfo(Delivery* d);
 private:
@@ -31,9 +33,10 @@ private:
 	std::vector<Delivery> _findDeliveriesFrom(const std::string& town); // returns indexes of all deliveries from given town
 	std::vector<Delivery> _findDeliveriesTo(const std::string& town); // shows all deliveries sent to given town
 	std::vector<Delivery> _findDeliveriesWithHigherPrice(int price);
-	void writeInContainer(nlohmann::json& js);
+	std::vector<Delivery> _findDeliveries(SEARCH_TYPE searchType, void* arg);
+	void writeInContainer(const std::string& filename);
 	void writeInFile(const std::string& fileindex);
-	void writeJsonInFile(nlohmann::json& js, const std::string& filename, Delivery* deliv);
+	void writeJsonInFile(const std::string& filename, Delivery* deliv);
 private:
 	//CONTAINER_TYPE containerType;
 	//Cmp<int>* cmp;
