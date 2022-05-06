@@ -4,9 +4,9 @@
 #include<forward_list>
 #include"AStar.h"
 
-DeliveryGenerator::DeliveryGenerator(std::vector<Station>* stations)
+DeliveryGenerator::DeliveryGenerator(/*std::vector<Station>* stations*/)
 {
-	this->stations = stations;
+	this->stations = Stations::Instance()->getStations();
 	setTransportSpeed();
 }
 

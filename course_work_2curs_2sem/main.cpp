@@ -20,7 +20,7 @@ int main()
 void test()
 {
 	App app;
-	app.startApplication();
+	app.createDeliveries();
 
 
 

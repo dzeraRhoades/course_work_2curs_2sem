@@ -4,10 +4,10 @@
 constexpr auto DATAFILE = "data/data";
 constexpr auto MAX_SIZE = 50; // max number data in one file
 
-Logistic::Logistic(Container* container, std::vector<Station>* stations)
+Logistic::Logistic(Container* container/*, std::vector<Station>* stations*/)
 {
 	deliveries = container;
-	this->stations = stations;
+	//this->stations = stations;
 }
 
 Logistic::~Logistic()
@@ -19,27 +19,15 @@ int Logistic::insert(Delivery* deliv) // avoid inserting in container
 {
 	std::ifstream f;
 	nlohmann::json js;
-	int file_count = 0;
+	int file_id = deliv->id / 50;
 	int size = 0;
 	std::string filename;
-	filename = DATAFILE + std::to_string(file_count) + ".json";
+	filename = DATAFILE + std::to_string(file_id) + ".json";
 	f.open(filename, std::ifstream::binary);
-	while (f.is_open())
+	if (f.is_open())
 	{
-		f >> js;
-		f.close();
-		if (js.at("size") < MAX_SIZE)
-		{
-			size = js["size"];
-			break;
-		}
-		js.clear();
-		file_count++;
-		filename = DATAFILE + std::to_string(file_count) + ".json";
-		f.open(filename, std::ifstream::binary);
+		//f >> js;
 	}
-	js["size"] = size;
-	js["size"] = js["size"] + 1;
 	try
 	{
 		writeJsonInFile(js, filename, deliv);
@@ -53,66 +41,53 @@ int Logistic::insert(Delivery* deliv) // avoid inserting in container
 
 int Logistic::erase(int id)
 {
-	JsonDelivery jd;
 	std::ifstream f;
 	nlohmann::json js;
-	Delivery del;
-	int file_count = 0;
+	int file_id = id / 50;
 	std::string filename;
-	filename = DATAFILE + std::to_string(file_count) + ".json";
+	filename = DATAFILE + std::to_string(file_id) + ".json";
 	f.open(filename, std::ifstream::binary);
 
-	while (f.is_open())
+	if(!f.is_open())
+		throw std::exception("Ёлемента с таким идентификатором не существует!!!");
+	f >> js;
+	f.close();
+	writeInContainer(js);
+	try
 	{
-		f >> js;
-		f.close();
-		writeInContainer(js);
-		try
-		{
-			eraseDelivery(id);
-			writeInFile(filename);
-			return 0;
-		}
-		catch (const std::exception& ex)
-		{
-			file_count++;
-			filename = DATAFILE + std::to_string(file_count) + ".json";
-			f.open(filename, std::ifstream::binary);
-		}
+		eraseDelivery(id);
 	}
-	throw std::exception("Ёлемента с таким идентификатором не существует!!!");
-	return 0;
+	catch (const std::exception&)
+	{
+		throw std::exception("Ёлемента с таким идентификатором не существует!!!");
+	}
+	writeInFile(filename);
+	return id;
 }
 
 int Logistic::find(int id)
 {
-	JsonDelivery jd;
 	std::ifstream f;
 	nlohmann::json js;
-	Delivery del;
-	int file_count = 0;
+	int file_id = id / 50;
 	std::string filename;
-	filename = DATAFILE + std::to_string(file_count) + ".json";
+	filename = DATAFILE + std::to_string(file_id) + ".json";
 	f.open(filename, std::ifstream::binary);
 
-	while (f.is_open())
+	if (!f.is_open())
+		throw std::exception("Ёлемента с таким идентификатором не существует!!!");
+	f >> js;
+	f.close();
+	writeInContainer(js);
+	try
 	{
-		f >> js;
-		f.close();
-		writeInContainer(js);
-		try
-		{
-			return findDelivery(id);
-		}
-		catch (const std::exception& ex)
-		{
-			file_count++;
-			filename = DATAFILE + std::to_string(file_count) + ".json";
-			f.open(filename, std::ifstream::binary);
-		}
+		findDelivery(id);
 	}
-	throw std::exception("Ёлемента с таким идентификатором не существует!!!");
-	return 0;
+	catch (const std::exception&)
+	{
+		throw std::exception("Ёлемента с таким идентификатором не существует!!!");
+	}
+	return id;
 }
 
 void Logistic::writeJsonInFile(nlohmann::json& js, const std::string& filename, Delivery* deliv)
@@ -123,7 +98,7 @@ void Logistic::writeJsonInFile(nlohmann::json& js, const std::string& filename, 
 	JsonDelivery jd;
 	nlohmann::json delJs;
 
-	jd.toJson(std::make_pair(deliv, stations), delJs);
+	jd.toJson(*deliv, delJs);
 	js["deliveries"].push_back(delJs);
 	fout << js;
 
@@ -220,7 +195,7 @@ void Logistic::writeInContainer(nlohmann::json& js)
 	deliveries->clear();
 	for (auto i : js["deliveries"])
 	{
-		jd.fromJson(std::make_pair(&del, stations), i);
+		jd.fromJson(del, i);
 		try
 		{
 			deliveries->insert(&del);
@@ -251,7 +226,7 @@ void Logistic::writeInFile(const std::string& filename)
 	delVec = deliveries->getVector();
 	for (auto i : delVec)
 	{
-		jd.toJson(std::make_pair(&i, stations), delJs);
+		jd.toJson(i, delJs);
 		js["deliveries"].push_back(delJs);
 	}
 	

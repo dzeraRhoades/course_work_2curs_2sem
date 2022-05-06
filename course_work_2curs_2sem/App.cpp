@@ -4,8 +4,8 @@
 App::App()
 {
 	setlocale(LC_ALL, "Russian");
-	setStations(stations);
-	gen = new DeliveryGenerator(&stations);
+	stations = Stations::Instance()->getStations();
+	gen = new DeliveryGenerator();
 }
 
 App::~App()
@@ -24,37 +24,57 @@ void App::startApplication()
 	menu();
 }
 
-void App::setStations(std::vector<Station>& stations)
+void App::createDeliveries()
 {
-	std::ifstream f("towns.json", std::ifstream::binary);
-	if (!f.is_open())
-		throw std::exception("towns file can't be opened");
-
-	nlohmann::json js;
-	nlohmann::json town;
-	f >> js;
-
-	int towns_num = js.at("towns").size();
-
-	Station st;
-
-	for (int i = 0; i < towns_num; i++)
+	Delivery del;
+	for (int i = 0; i < 10000; i++)
 	{
-		town = js.at("towns")[i];
-		for (int j = 0; j < town.at("neighbours").size(); j++) // adding neighbours
+		if (i % 1000 == 0)
+			std::cout << std::endl;
+		del = gen->generateDelivery();
+		try
 		{
-			st.adjacentStations.push_back(town.at("neighbours")[j]);
+			logCompany->insert(&del);
 		}
-		st.index = i;
-		st.coords.x = town.at("x");
-		st.coords.y = town.at("y");
-		st.name = town.at("name");
-		stations.push_back(st);
-		st.adjacentStations.clear();
+		catch (const std::exception&)
+		{
+			
+		}
 	}
-
-	f.close();
+	
 }
+
+//void App::setStations(std::vector<Station>& stations)
+//{
+//	std::ifstream f("towns.json", std::ifstream::binary);
+//	if (!f.is_open())
+//		throw std::exception("towns file can't be opened");
+//
+//	nlohmann::json js;
+//	nlohmann::json town;
+//	f >> js;
+//
+//	int towns_num = js.at("towns").size();
+//
+//	Station st;
+//
+//	for (int i = 0; i < towns_num; i++)
+//	{
+//		town = js.at("towns")[i];
+//		for (int j = 0; j < town.at("neighbours").size(); j++) // adding neighbours
+//		{
+//			st.adjacentStations.push_back(town.at("neighbours")[j]);
+//		}
+//		st.index = i;
+//		st.coords.x = town.at("x");
+//		st.coords.y = town.at("y");
+//		st.name = town.at("name");
+//		stations.push_back(st);
+//		st.adjacentStations.clear();
+//	}
+//
+//	f.close();
+//}
 
 void App::menu()
 {
@@ -81,7 +101,7 @@ void App::menu()
 			{
 				container = new VectorContainer;
 			}
-			logCompany = new Logistic(container, &stations);
+			logCompany = new Logistic(container);
 			menuTab = MENU::CHOOSE_OPERATION;
 			buf = "";
 			break;

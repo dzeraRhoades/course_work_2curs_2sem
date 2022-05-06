@@ -151,6 +151,7 @@
     <ClCompile Include="Logistic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Station.cpp" />
+    <ClCompile Include="Stations.cpp" />
     <ClCompile Include="trees\AVL.cpp" />
     <ClCompile Include="trees\Cmp.cpp" />
     <ClCompile Include="trees\Node.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Json.h" />
     <ClInclude Include="Logistic.h" />
     <ClInclude Include="Station.h" />
+    <ClInclude Include="Stations.h" />
     <ClInclude Include="trees\AVL.h" />
     <ClInclude Include="trees\Cmp.h" />
     <ClInclude Include="trees\Node.h" />

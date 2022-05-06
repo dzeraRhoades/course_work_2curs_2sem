@@ -13,7 +13,7 @@ public:
 		TREE,
 		VECTOR
 	};*/
-	Logistic(Container* container, std::vector<Station>* stations);
+	Logistic(Container* container/*, std::vector<Station>* stations*/);
 	~Logistic();
 	int insert(Delivery* deliv);
 	int erase(int id);
@@ -40,7 +40,7 @@ private:
 	//AVL<int, Delivery>* deliveriesTree;
 	//std::vector<Delivery>* deliveriesVector;
 	Container* deliveries = nullptr;
-	std::vector<Station>* stations;
+	//std::vector<Station>* stations;
 	int size = 0;
 };
 

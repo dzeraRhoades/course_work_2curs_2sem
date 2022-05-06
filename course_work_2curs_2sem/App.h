@@ -23,15 +23,16 @@ public:
 	App();
 	~App();
 	void startApplication();
+	void createDeliveries();
 private:
-	void setStations(std::vector<Station>& stations);
+	//void setStations(std::vector<Station>& stations);
 	void menu();
 private:
 	MENU menuTab = MENU::CHOOSE_CONTAINER;
 	Logistic* logCompany = nullptr;
 	Container* container = nullptr;
 	Cmp<int>* cmp;
-	std::vector<Station> stations;
+	const std::vector<Station>* stations;
 	DeliveryGenerator* gen = nullptr;
 };
 

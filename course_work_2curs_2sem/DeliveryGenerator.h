@@ -9,7 +9,7 @@ constexpr auto DATAFILE = "data/data";
 class DeliveryGenerator
 {
 public:
-	DeliveryGenerator(std::vector<Station>* stations);
+	DeliveryGenerator(/*std::vector<Station>* stations*/);
 	Delivery generateDelivery();
 private:
 	void setTransportSpeed();
